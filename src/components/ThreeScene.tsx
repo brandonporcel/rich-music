@@ -7,7 +7,7 @@ import { getVinyls } from "@/services/vinyls";
 import { Vinyl } from "@/utils/Definitions";
 
 export default function ThreeScene() {
-  const canvasRef = useRef<HTMLCanvasElement | undefined>(undefined);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const handleScene = (ITEMS: Vinyl[]) => {
     if (ITEMS.length === 0) return;
@@ -80,11 +80,12 @@ export default function ThreeScene() {
       }
 
       raycaster = new THREE.Raycaster();
-
-      renderer = new THREE.WebGLRenderer({
-        canvas: canvasRef.current,
-        antialias: true,
-      });
+      if (canvasRef.current) {
+        renderer = new THREE.WebGLRenderer({
+          canvas: canvasRef.current,
+          antialias: true,
+        });
+      }
       renderer.setPixelRatio(window.devicePixelRatio);
       renderer.setSize(window.innerWidth, window.innerHeight);
 
