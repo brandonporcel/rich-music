@@ -1,6 +1,6 @@
 import { dbConnect } from "@/libs/mongodb";
-import Vinyl from "@/models/Vinyl";
 import { NextResponse } from "next/server";
+import Vinyl from "@/models/Vinyl";
 
 export async function GET() {
   await dbConnect();

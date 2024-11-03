@@ -1,17 +1,37 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { CinematicCamera } from "three/addons/cameras/CinematicCamera.js";
 import { BokehShaderUniforms } from "three/examples/jsm/shaders/BokehShader2.js";
-import { getVinyls } from "@/services/vinyls";
+import { getRandomVinyls } from "@/services/vinyls";
 import { Vinyl } from "@/utils/Definitions";
 
 export default function ThreeScene() {
+  let gui: dat.GUI;
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  const handleScene = (ITEMS: Vinyl[]) => {
-    if (ITEMS.length === 0) return;
+  const handleScene = async (ITEMS: Vinyl[]) => {
+    const dat = await import("dat.gui");
+    if (!gui) {
+      gui = new dat.GUI({ autoPlace: true });
+    }
 
+    const effectFolder = gui.addFolder(`General ${(Date.now() + "").at(-1)}`);
+
+    const paramsGUI = {
+      separation: 50,
+      cubeSize: 20,
+      rotationSpeed: 0.2,
+    };
+
+    let speed = paramsGUI.rotationSpeed;
+    gui
+      .add(paramsGUI, "rotationSpeed", 0, 1, 0.1)
+      .onChange(updateRotationSpeed);
+    gui.add(paramsGUI, "separation", 25, 100, 5).onChange(updatePositions);
+    gui.add(paramsGUI, "cubeSize", 20, 50, 5).onChange(updateCubeSize);
+
+    if (ITEMS.length === 0) return;
     let camera: CinematicCamera,
       scene: THREE.Scene,
       raycaster: THREE.Raycaster,
@@ -44,37 +64,28 @@ export default function ThreeScene() {
       light.position.set(1, 1, 1).normalize();
       scene.add(light);
 
-      const geometry = new THREE.BoxGeometry(20, 20, 20);
+      const geometry = new THREE.BoxGeometry(
+        paramsGUI.cubeSize,
+        paramsGUI.cubeSize,
+        paramsGUI.cubeSize
+      );
+
       const textureLoader = new THREE.TextureLoader();
 
       for (let i = 0; i < ITEMS.length; i++) {
         const item = ITEMS[i];
+        const thumbnail = { map: textureLoader.load(item.thumbnail) };
         const materials = [
-          new THREE.MeshLambertMaterial({
-            map: textureLoader.load(item.face1 ?? item.thumbnail),
-          }),
-          new THREE.MeshLambertMaterial({
-            map: textureLoader.load(item.face2 ?? item.thumbnail),
-          }),
-          new THREE.MeshLambertMaterial({
-            map: textureLoader.load(item.face3 ?? item.thumbnail),
-          }),
-          new THREE.MeshLambertMaterial({
-            map: textureLoader.load(item.face4 ?? item.thumbnail),
-          }),
-          new THREE.MeshLambertMaterial({
-            map: textureLoader.load(item.face5 ?? item.thumbnail),
-          }),
-          new THREE.MeshLambertMaterial({
-            map: textureLoader.load(item.face6 ?? item.thumbnail),
-          }),
+          new THREE.MeshLambertMaterial(thumbnail),
+          new THREE.MeshLambertMaterial(thumbnail),
+          new THREE.MeshLambertMaterial(thumbnail),
+          new THREE.MeshLambertMaterial(thumbnail),
+          new THREE.MeshLambertMaterial(thumbnail),
+          new THREE.MeshLambertMaterial(thumbnail),
         ];
 
         const object = new THREE.Mesh(geometry, materials);
-        // Ajustar rango para menos separación
-        object.position.x = Math.random() * 200 - 100;
-        object.position.y = Math.random() * 200 - 100;
-        object.position.z = Math.random() * 200 - 100;
+        updateObjectPosition(object);
 
         scene.add(object);
       }
@@ -121,7 +132,45 @@ export default function ThreeScene() {
           camera.postprocessing.bokeh_uniforms["focalDepth"].value;
       };
 
+      effectFolder
+        .add(effectController, "focalLength", 5, 75, 5)
+        .onChange(matChanger);
       matChanger();
+    }
+
+    function updateObjectPosition(object: THREE.Mesh) {
+      object.position.x =
+        Math.random() * paramsGUI.separation - paramsGUI.separation / 2;
+      object.position.y =
+        Math.random() * paramsGUI.separation - paramsGUI.separation / 2;
+      object.position.z =
+        Math.random() * paramsGUI.separation - paramsGUI.separation / 2;
+    }
+
+    function updatePositions() {
+      scene.children.forEach((child) => {
+        if (child instanceof THREE.Mesh) {
+          updateObjectPosition(child);
+        }
+      });
+    }
+
+    function updateCubeSize() {
+      scene.children.forEach((child) => {
+        if (child instanceof THREE.Mesh) {
+          const newGeometry = new THREE.BoxGeometry(
+            paramsGUI.cubeSize,
+            paramsGUI.cubeSize,
+            paramsGUI.cubeSize
+          );
+          child.geometry.dispose();
+          child.geometry = newGeometry;
+        }
+      });
+    }
+
+    function updateRotationSpeed() {
+      speed = paramsGUI.rotationSpeed;
     }
 
     function onWindowResize() {
@@ -142,7 +191,7 @@ export default function ThreeScene() {
     }
 
     function render() {
-      theta += 0.2;
+      theta += speed;
       camera.position.x = radius * Math.sin(THREE.MathUtils.degToRad(theta));
       camera.position.y = radius * Math.sin(THREE.MathUtils.degToRad(theta));
       camera.position.z = radius * Math.cos(THREE.MathUtils.degToRad(theta));
@@ -187,7 +236,7 @@ export default function ThreeScene() {
     };
   };
   useEffect(() => {
-    const getItems = async () => await getVinyls();
+    const getItems = async () => await getRandomVinyls();
     getItems().then((items) => {
       handleScene(items);
     });
