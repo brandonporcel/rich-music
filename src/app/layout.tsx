@@ -5,8 +5,42 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Rich music",
-  description: "Rich music, vinilos",
+  title: "Rich Music",
+  description: "Vinyls I want",
+  authors: { name: "Brandon Porcel", url: "https://github.com/brandonporcel?" },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://rich-music.vercel.app/",
+    title: "Rich Music",
+    description: "Vinyls I want",
+    siteName: "Keep Code",
+    images: [
+      {
+        url: "https://rich-music.vercel.app//og.png",
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Rich Music",
+    description: "Vinyls I want",
+    images: [
+      {
+        url: "https://keep-code.vercel.app/og.png",
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
+  icons: [
+    {
+      type: "favicon",
+      url: "favicon.ico",
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -16,13 +50,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <link
-          rel="shortcut icon"
-          href="https://images.emojiterra.com/twitter/v14.0/512px/1f3a7.png"
-          type="image/png"
-        />
-      </head>
       <body className={inter.className}>{children}</body>
     </html>
   );

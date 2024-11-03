@@ -1,4 +1,3 @@
-"use client";
 import ThreeScene from "@/components/ThreeScene";
 import css from "./page.module.css";
 import Link from "next/link";

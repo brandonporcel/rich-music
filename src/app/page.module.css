@@ -1,5 +1,5 @@
-.add{
-  background:none ;
+.add {
+  background: none;
   border: none;
   outline: none;
   padding: 2px 4px;
@@ -8,6 +8,6 @@
   color: #333;
   position: absolute;
   top: 0;
-  right: 0;
+  left: 0;
   cursor: pointer;
 }

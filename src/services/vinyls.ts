@@ -1,14 +1,44 @@
 import { Vinyl } from "@/utils/Definitions";
+const BASE_URL = process.env.NEXT_PUBLIC_URL;
 
 export const getVinyls = async (): Promise<Vinyl[]> => {
   try {
-    const res = await fetch("/api/vinyls");
+    const res = await fetch(`${BASE_URL}/api/vinyls`);
     const data = await res.json();
 
     return parseVinyls(data);
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    console.log(error.message);
     return [];
+  }
+};
+
+export const getRandomVinyls = async (): Promise<Vinyl[]> => {
+  try {
+    const res = await fetch(`${BASE_URL}/api/randomLimit`);
+    const data = await res.json();
+
+    return parseVinyls(data);
+  } catch (error: any) {
+    console.log(error.message);
+    return [];
+  }
+};
+
+export const createVinyl = async (data: any): Promise<Vinyl> => {
+  try {
+    const res = await fetch(`${BASE_URL}/api/vinyls`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    return parseVinyl(await res.json());
+  } catch (error: any) {
+    console.error(error.message);
+    throw Error(error.message);
   }
 };
 
@@ -24,3 +54,4 @@ export const parseVinyl = (item: any): Vinyl => {
     artist: item.artist ?? "",
   };
 };
+3;
