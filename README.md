@@ -20,4 +20,4 @@ npm run dev
 
 ## Feedback
 
-I’d love to hear your thoughts! Contact me via [mail](brandon7.7porcel@gmail.com) or [linkedin](https://www.linkedin.com/in/brandonporcel/)
+I’d love to hear your thoughts! Contact me via [mail](mailto:brandon7.7porcel@gmail.com) or [linkedin](https://www.linkedin.com/in/brandonporcel/)
