@@ -1,5 +1,5 @@
 import { Vinyl } from "@/utils/Definitions";
-const BASE_URL = process.env.NEXT_PUBLIC_URL;
+export const BASE_URL = process.env.NEXT_PUBLIC_URL;
 
 export const getVinyls = async (): Promise<Vinyl[]> => {
   try {

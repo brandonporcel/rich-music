@@ -15,7 +15,6 @@ npm run dev
 
 ## To-Do
 
-- [ ] After add album, add to list without refreshing
 - [ ] Add feature to rotate camera with mouse
 
 ## Feedback

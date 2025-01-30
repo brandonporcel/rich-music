@@ -1,8 +1,9 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { mutate } from "swr";
 import css from "./form.module.css";
-import { createVinyl } from "@/services/vinyls";
+import { BASE_URL, createVinyl } from "@/services/vinyls";
 
 const initialVinyl = {
   name: "",
@@ -21,6 +22,17 @@ export default function Form() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
 
+  const updateVinyls = async (addedVinyl: any) => {
+    mutate(
+      `${BASE_URL}/api/vinyls`,
+      (currentVinyls: any) => {
+        if (!currentVinyls) return [addedVinyl];
+        return [...currentVinyls, addedVinyl];
+      },
+      false
+    );
+  };
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     let errs = validate();
@@ -33,7 +45,10 @@ export default function Form() {
     };
     try {
       setIsSubmitting(true);
-      await createVinyl(data);
+      const addedVinyl = await createVinyl(data);
+
+      updateVinyls(addedVinyl);
+
       setErrors({});
       setNewVinyl(initialVinyl);
       setPass("");
