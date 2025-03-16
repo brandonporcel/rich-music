@@ -15,9 +15,8 @@ export const getVinyls = async (): Promise<Vinyl[]> => {
 
 export const getRandomVinyls = async (): Promise<Vinyl[]> => {
   try {
-    const res = await fetch(`${BASE_URL}/api/randomLimit`);
+    const res = await fetch(`${BASE_URL}/api/randomLimit?_=${Date.now()}`);
     const data = await res.json();
-
     return parseVinyls(data);
   } catch (error: any) {
     console.log(error.message);
