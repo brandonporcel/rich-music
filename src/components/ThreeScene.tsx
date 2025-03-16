@@ -2,20 +2,20 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import useSWR from "swr";
+import { getRandomVinyls } from "@/services/vinyls";
 import { CinematicCamera } from "three/addons/cameras/CinematicCamera.js";
 import { BokehShaderUniforms } from "three/examples/jsm/shaders/BokehShader2.js";
-import { getRandomVinyls } from "@/services/vinyls";
 import { Vinyl } from "@/utils/Definitions";
 
 export default function ThreeScene() {
+  const quantity = 1;
   const {
     data: items,
     error,
     isLoading,
-  } = useSWR("/api/randomLimit", getRandomVinyls, {
-    refreshInterval: 0,
+  } = useSWR(`/api/randomLimit/${quantity}`, () => getRandomVinyls(quantity), {
     revalidateOnFocus: false,
-    revalidateOnReconnect: true,
+    shouldRetryOnError: false,
   });
 
   const gui = useRef<dat.GUI | null>(null);
@@ -273,11 +273,11 @@ export default function ThreeScene() {
   );
 
   useEffect(() => {
-    if (items) {
-      console.log("items", items);
-      handleScene(items);
-    }
+    if (items) handleScene(items);
   }, [items]);
+
+  if (isLoading) return <div>Cargando...</div>;
+  if (error) return <div>Error al cargar los datos.</div>;
 
   return (
     <div>
