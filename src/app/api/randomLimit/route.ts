@@ -12,9 +12,7 @@ export async function GET() {
       },
     });
   } catch (error) {
-    return NextResponse.json(
-      { error: "Error fetching vinyls" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Error fetching vinyls" }, { status: 500 });
   }
 }
+

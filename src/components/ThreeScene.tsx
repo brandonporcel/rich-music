@@ -1,12 +1,23 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import useSWR from "swr";
 import { CinematicCamera } from "three/addons/cameras/CinematicCamera.js";
 import { BokehShaderUniforms } from "three/examples/jsm/shaders/BokehShader2.js";
 import { getRandomVinyls } from "@/services/vinyls";
 import { Vinyl } from "@/utils/Definitions";
 
 export default function ThreeScene() {
+  const {
+    data: items,
+    error,
+    isLoading,
+  } = useSWR("/api/randomLimit", getRandomVinyls, {
+    refreshInterval: 0,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: true,
+  });
+
   const gui = useRef<dat.GUI | null>(null);
   const [existGUI, setExistGUI] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -262,11 +273,8 @@ export default function ThreeScene() {
   );
 
   useEffect(() => {
-    const getItems = async () => await getRandomVinyls();
-    getItems().then((items) => {
-      handleScene(items);
-    });
-  }, [handleScene]);
+    if (items) handleScene(items);
+  }, [items]);
 
   return (
     <div>
