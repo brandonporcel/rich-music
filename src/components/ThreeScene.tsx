@@ -273,7 +273,10 @@ export default function ThreeScene() {
   );
 
   useEffect(() => {
-    if (items) handleScene(items);
+    if (items) {
+      console.log("items", items);
+      handleScene(items);
+    }
   }, [items]);
 
   return (
