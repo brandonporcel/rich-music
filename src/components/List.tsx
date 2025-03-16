@@ -20,7 +20,7 @@ export default function List() {
   if (!vinyls) return <p style={{ paddingLeft: "20px" }}>⏳ Loading...</p>;
 
   return (
-    <ol style={{ paddingLeft: "50px" }}>
+    <ol style={{ paddingLeft: "50px", paddingBottom: "20px" }}>
       {vinyls.map(({ id, name }) => (
         <li key={id}>{name}</li>
       ))}
