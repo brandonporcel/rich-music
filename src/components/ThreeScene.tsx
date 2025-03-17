@@ -8,7 +8,7 @@ import { BokehShaderUniforms } from "three/examples/jsm/shaders/BokehShader2.js"
 import { Vinyl } from "@/utils/Definitions";
 
 export default function ThreeScene() {
-  const quantity = 1;
+  const quantity = 20;
   const {
     data: items,
     error,
