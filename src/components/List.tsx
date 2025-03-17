@@ -1,5 +1,5 @@
 "use client";
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 import { Vinyl } from "@/utils/Definitions";
 import { BASE_URL, getVinyls } from "@/services/vinyls";
 
