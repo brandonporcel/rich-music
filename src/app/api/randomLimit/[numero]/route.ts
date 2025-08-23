@@ -7,8 +7,7 @@ export async function GET(_req: Request, { params }: { params: { numero: string 
     await dbConnect();
     const vinyls = await Vinyl.aggregate([{ $sample: { size: +params.numero } }]);
 
-    // return NextResponse.json(vinyls, { status: 200 });
-     return new NextResponse(JSON.stringify(vinyls), {
+    return NextResponse.json(vinyls, {
       status: 200,
       headers: {
         "Access-Control-Allow-Origin": "*", 
