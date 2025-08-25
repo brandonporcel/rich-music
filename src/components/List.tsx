@@ -3,7 +3,7 @@ import useSWR from "swr";
 import { Vinyl } from "@/utils/Definitions";
 import { BASE_URL, getVinyls } from "@/services/vinyls";
 
-export default function List() {
+export default function List({ onEdit }: { onEdit: (v: Vinyl) => void }) {
   const { data: vinyls, error } = useSWR<Vinyl[]>(
     `${BASE_URL}/api/vinyls`,
     getVinyls
@@ -21,8 +21,11 @@ export default function List() {
 
   return (
     <ol style={{ paddingLeft: "50px", paddingBottom: "20px" }}>
-      {vinyls.map(({ id, name }) => (
-        <li key={id}>{name}</li>
+      {vinyls.map((v) => (
+        <li key={v.id}>
+          {v.name}
+          <button onClick={() => onEdit(v)} style={{ padding: 4 }}></button>
+        </li>
       ))}
     </ol>
   );

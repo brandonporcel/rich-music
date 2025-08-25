@@ -1,80 +1,23 @@
 "use client";
-import { useState } from "react";
 import Link from "next/link";
-import { mutate } from "swr";
 import css from "./form.module.css";
-import { BASE_URL, createVinyl } from "@/services/vinyls";
+import useVinylForm from "@/hooks/useVinylForm";
+import { Vinyl } from "@/utils/Definitions";
 
-const initialVinyl = {
-  name: "",
-  thumbnail: "",
-  face1: "",
-  face2: "",
-  face3: "",
-  face4: "",
-  face5: "",
-  face6: "",
-};
+export default function Form({
+  initialData,
+  onSuccess,
+}: {
+  initialData?: Vinyl;
+  onSuccess?: (saved: Vinyl) => void;
+}) {
+  const { vinyl, pass, setPass, isSubmitting, handleChange, cancelEdit, save } =
+    useVinylForm(initialData);
 
-export default function Form() {
-  const [newVinyl, setNewVinyl] = useState(initialVinyl);
-  const [pass, setPass] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errors, setErrors] = useState({});
-
-  const updateVinyls = async (addedVinyl: any) => {
-    mutate(
-      `${BASE_URL}/api/vinyls`,
-      (currentVinyls: any) => {
-        if (!currentVinyls) return [addedVinyl];
-        return [...currentVinyls, addedVinyl];
-      },
-      false
-    );
-  };
-
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    let errs = validate();
-    if (Object.keys(errs).length || !pass) {
-      return setErrors(errs);
-    }
-    const data = {
-      pass,
-      vinyl: newVinyl,
-    };
-    try {
-      setIsSubmitting(true);
-      const addedVinyl = await createVinyl(data);
-
-      updateVinyls(addedVinyl);
-
-      setErrors({});
-      setNewVinyl(initialVinyl);
-      setPass("");
-    } catch (error) {
-      alert("Hubo un error");
-      console.log(error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleChange = (e: any) => {
-    setNewVinyl({ ...newVinyl, [e.target.name]: e.target.value });
-  };
-
-  const validate = () => {
-    let errors: any = {};
-
-    if (!newVinyl.name || newVinyl.name.trim() === "") {
-      errors.name = "name is required";
-    }
-    if (!newVinyl.thumbnail || newVinyl.thumbnail.trim() === "") {
-      errors.thumbnail = "thumbnail is required";
-    }
-
-    return errors;
+    const saved = await save();
+    if (saved && onSuccess) onSuccess(saved);
   };
 
   return (
@@ -88,9 +31,16 @@ export default function Form() {
         placeholder="name"
         name="name"
         onChange={handleChange}
-        value={newVinyl.name}
-        autoFocus
+        value={vinyl.name}
         required
+      />
+      <input
+        className={css.input}
+        type="text"
+        placeholder="artist"
+        name="artist"
+        onChange={handleChange}
+        value={vinyl.artist}
       />
       <input
         className={css.input}
@@ -98,8 +48,16 @@ export default function Form() {
         placeholder="thumbnail"
         name="thumbnail"
         onChange={handleChange}
-        value={newVinyl.thumbnail}
+        value={vinyl.thumbnail}
         required
+      />
+      <input
+        className={css.input}
+        type="text"
+        placeholder="spotifyId"
+        name="spotifyId"
+        onChange={handleChange}
+        value={vinyl.spotifyId || ""}
       />
       <textarea
         className={css.textarea}
@@ -111,8 +69,18 @@ export default function Form() {
       ></textarea>
 
       <button disabled={isSubmitting} className={css.button}>
-        add
+        {vinyl.id ? "update" : "add"}
       </button>
+
+      {vinyl.id && (
+        <button
+          type="button"
+          onClick={() => cancelEdit()}
+          className={css.button + " " + css.cancel}
+        >
+          cancel
+        </button>
+      )}
     </form>
   );
 }

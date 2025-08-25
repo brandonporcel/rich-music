@@ -2,6 +2,7 @@ export interface Vinyl {
   id: string;
   name: string;
   thumbnail: string;
+  spotifyId?: string;
   artist?: string;
   face1?: string;
   face2?: string;

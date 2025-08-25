@@ -1,37 +1,41 @@
-.form{
-    padding: 8px;
-    width: 200px;
+.form {
+  padding: 8px;
+  width: 200px;
 }
-.link{
-    margin-bottom: 22px;
-}
-
-.input,.textarea{
-    display: block;
-    height: 42px;
-    margin-bottom: 8px;
-    border: 1px solid #333;
-    padding: 0 8px;
-    margin-top: 4px;
-    width: 100%;
-    &::placeholder{
-        text-transform: lowercase;
-    }
+.link {
+  margin-bottom: 22px;
 }
 
-.faces{
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(2,1fr);
-    gap: 4px;
-    margin-bottom: 8px;
-    .small{
-        width: 100%;
-    }
+.input,
+.textarea {
+  display: block;
+  height: 42px;
+  margin-bottom: 8px;
+  border: 1px solid #333;
+  padding: 0 8px;
+  margin-top: 4px;
+  width: 100%;
+  &::placeholder {
+    text-transform: lowercase;
+  }
 }
 
-.button{
+.faces {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px;
+  margin-bottom: 8px;
+  .small {
     width: 100%;
-    height: 42px;
-    cursor: pointer;
+  }
+}
+
+.button {
+  width: 100%;
+  height: 42px;
+  cursor: pointer;
+}
+.cancel {
+  margin-top: 4px;
 }

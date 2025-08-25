@@ -276,7 +276,7 @@ export default function ThreeScene() {
     if (items) handleScene(items);
   }, [items]);
 
-  if (isLoading) return <div>Cargando...</div>;
+  if (isLoading) return <div style={{ marginTop: 24 }}>Cargando...</div>;
   if (error) return <div>Error al cargar los datos.</div>;
 
   return (

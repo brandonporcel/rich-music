@@ -10,6 +10,16 @@ const schema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    artist: {
+      type: String,
+      required: true,
+    },
+    spotifyId: {
+      type: String,
+      unique: true,
+      sparse: true,
+      required: false,
+    },
     face1: String,
     face2: String,
     face3: String,

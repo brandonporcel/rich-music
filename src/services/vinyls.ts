@@ -13,7 +13,7 @@ export const getVinyls = async (): Promise<Vinyl[]> => {
   }
 };
 
-export const getRandomVinyls = async (itemsQuantity=1): Promise<Vinyl[]> => {
+export const getRandomVinyls = async (itemsQuantity = 1): Promise<Vinyl[]> => {
   try {
     const res = await fetch(`${BASE_URL}/api/randomLimit/${itemsQuantity}`);
     const data = await res.json();
@@ -23,7 +23,6 @@ export const getRandomVinyls = async (itemsQuantity=1): Promise<Vinyl[]> => {
     return [];
   }
 };
-
 
 export const createVinyl = async (data: any): Promise<Vinyl> => {
   try {
@@ -35,6 +34,22 @@ export const createVinyl = async (data: any): Promise<Vinyl> => {
       body: JSON.stringify(data),
     });
 
+    return parseVinyl(await res.json());
+  } catch (error: any) {
+    console.error(error.message);
+    throw Error(error.message);
+  }
+};
+
+export const updateVinyl = async (data: any): Promise<Vinyl> => {
+  try {
+    const res = await fetch(`${BASE_URL}/api/vinyls/${data.vinyl.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
     return parseVinyl(await res.json());
   } catch (error: any) {
     console.error(error.message);
