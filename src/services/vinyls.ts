@@ -67,6 +67,8 @@ export const parseVinyl = (item: any): Vinyl => {
     name: item.name,
     thumbnail: item.thumbnail,
     artist: item.artist ?? "",
+    spotifyId: item.spotifyId ?? "",
+    ...item,
   };
 };
 3;
