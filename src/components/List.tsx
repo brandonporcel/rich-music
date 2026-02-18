@@ -1,12 +1,13 @@
 "use client";
 import useSWR from "swr";
 import { Vinyl } from "@/utils/Definitions";
+import { COUNTRIES } from "@/utils/countries";
 import { BASE_URL, getVinyls } from "@/services/vinyls";
 
 export default function List({ onEdit }: { onEdit: (v: Vinyl) => void }) {
   const { data: vinyls, error } = useSWR<Vinyl[]>(
     `${BASE_URL}/api/vinyls`,
-    getVinyls
+    getVinyls,
   );
 
   if (error) {
@@ -23,7 +24,10 @@ export default function List({ onEdit }: { onEdit: (v: Vinyl) => void }) {
     <ol style={{ paddingLeft: "50px", paddingBottom: "20px" }}>
       {vinyls.map((v) => (
         <li key={v.id}>
-          {v.name}
+          {v.artist} - {v.name}{" "}
+          <span title={v.country}>
+            {v.country && COUNTRIES[v.country]?.flag}
+          </span>
           <button onClick={() => onEdit(v)} style={{ padding: 4 }}></button>
         </li>
       ))}

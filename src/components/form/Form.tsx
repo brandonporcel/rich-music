@@ -3,6 +3,7 @@ import Link from "next/link";
 import css from "./form.module.css";
 import useVinylForm from "@/hooks/useVinylForm";
 import { Vinyl } from "@/utils/Definitions";
+import CountryInput from "./CountryInput";
 
 export default function Form({
   initialData,
@@ -67,6 +68,13 @@ export default function Form({
         placeholder="pass"
         required
       ></textarea>
+
+      <CountryInput
+        value={vinyl.country || ""}
+        onChange={(code) =>
+          handleChange({ target: { name: "country", value: code } } as any)
+        }
+      />
 
       <button disabled={isSubmitting} className={css.button}>
         {vinyl.id ? "update" : "add"}

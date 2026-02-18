@@ -15,6 +15,7 @@ const emptyVinyl = {
   face4: "",
   face5: "",
   face6: "",
+  country: "",
 };
 
 function useVinylForm(initialData: Vinyl = emptyVinyl) {
@@ -29,7 +30,7 @@ function useVinylForm(initialData: Vinyl = emptyVinyl) {
   }, [initialData]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setVinyl({ ...vinyl, [e.target.name]: e.target.value });
   };
@@ -59,7 +60,7 @@ function useVinylForm(initialData: Vinyl = emptyVinyl) {
         mutate(
           `${BASE_URL}/api/vinyls`,
           (curr: any) => (curr ? [...curr, saved] : [saved]),
-          false
+          false,
         );
       }
 

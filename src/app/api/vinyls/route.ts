@@ -10,7 +10,7 @@ export async function GET() {
   } catch (error) {
     return NextResponse.json(
       { error: "Error fetching vinyls" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(
       { message: error instanceof Error ? error.message : "Unknown error" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 }

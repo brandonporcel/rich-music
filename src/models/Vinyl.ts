@@ -26,8 +26,9 @@ const schema = new mongoose.Schema(
     face4: String,
     face5: String,
     face6: String,
+    country: String,
   },
-  { timestamps: false }
+  { timestamps: false },
 );
 
 export default mongoose.models.Vinyl || mongoose.model("Vinyl", schema);

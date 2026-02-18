@@ -10,4 +10,5 @@ export interface Vinyl {
   face4?: string;
   face5?: string;
   face6?: string;
+  country?: string;
 }
