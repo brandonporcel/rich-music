@@ -3,6 +3,19 @@ import { useState, useRef } from "react";
 import { COUNTRIES } from "@/utils/countries";
 import css from "./form.module.css";
 
+const PRIORITY_CODES = [
+  "US",
+  "GB",
+  "AR",
+  "BR",
+  "MX",
+  "ES",
+  "DE",
+  "FR",
+  "JP",
+  "AU",
+];
+
 export default function CountryInput({
   value,
   onChange,
@@ -16,10 +29,21 @@ export default function CountryInput({
   const [open, setOpen] = useState(false);
   const skipBlur = useRef(false);
 
+  const allEntries = Object.entries(COUNTRIES);
+
+  const sorted = [
+    ...PRIORITY_CODES.map((code) => [code, COUNTRIES[code]] as const).filter(
+      ([, v]) => v,
+    ),
+    ...allEntries
+      .filter(([code]) => !PRIORITY_CODES.includes(code))
+      .sort(([, a], [, b]) => a.name.localeCompare(b.name)),
+  ];
+
   const filtered =
     query.length < 1
-      ? []
-      : Object.entries(COUNTRIES).filter(
+      ? sorted // 👈 al hacer focus muestra todos (prioritarios primero)
+      : sorted.filter(
           ([code, { name }]) =>
             name.toLowerCase().includes(query.toLowerCase()) ||
             code.toLowerCase().includes(query.toLowerCase()),
